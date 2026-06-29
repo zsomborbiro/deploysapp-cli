@@ -25,6 +25,7 @@ export async function deploy({ service } = {}) {
   const client = makeClient();
   const serviceId = resolveServiceId({ flag: service });
   const { build } = await client.post(`/services/${encodeURIComponent(serviceId)}/redeploy`);
+  if (!build?.id) { const e = new Error("Redeploy did not return a build. Check the service has a connected git repo."); e.exitCode = 3; throw e; }
   console.log(`Build ${build.id} queued. Streaming logs…\n`);
   const status = await streamBuild(client, build.id);
   if (status === "success") { console.log("\n✓ Deploy succeeded."); }

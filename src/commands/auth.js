@@ -20,10 +20,18 @@ export function pollForToken(fetchFn, { intervalMs = 5000, maxMs = 600000 } = {}
       if (r.status === 200 && r.body?.api_key) return resolve(r.body.api_key);
       const err = r.body?.error;
       if (err === "authorization_pending") {
-        if (Date.now() > deadline) return reject(new Error("Login timed out."));
+        if (Date.now() > deadline) {
+          const e = new Error("Login timed out.");
+          e.exitCode = 3;
+          return reject(e);
+        }
         return setTimeout(tick, intervalMs);
       }
-      if (err === "expired_token") return reject(new Error("Code expired — run `deploysapp login` again."));
+      if (err === "expired_token") {
+        const e = new Error("Code expired — run `deploysapp login` again.");
+        e.exitCode = 3;
+        return reject(e);
+      }
       if (err === "access_denied") return reject(new Error("Login was denied."));
       return reject(new Error(err || "Login failed."));
     };

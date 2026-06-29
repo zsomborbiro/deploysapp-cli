@@ -10,10 +10,15 @@
   "scripts": {
     "test": "vitest run"
   },
-  "keywords": [],
+  "keywords": [
+    "deploysapp",
+    "cli",
+    "hosting",
+    "deployment"
+  ],
   "author": "",
-  "license": "ISC",
-  "description": "",
+  "license": "MIT",
+  "description": "Command-line client for the DeploysApp hosting platform — deploy, logs, env, and service control from your terminal.",
   "type": "module",
   "bin": {
     "deploysapp": "bin/deploysapp.js",
@@ -24,5 +29,10 @@
   },
   "devDependencies": {
     "vitest": "^4.1.9"
-  }
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md"
+  ]
 }
