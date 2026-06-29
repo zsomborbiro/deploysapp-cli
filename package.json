@@ -1,0 +1,26 @@
+{
+  "name": "@deploysapp/cli",
+  "version": "0.1.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "bin": {
+    "deploysapp": "bin/deploysapp.js",
+    "dsa": "bin/deploysapp.js"
+  },
+  "dependencies": {
+    "commander": "^14.0.3"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.9"
+  }
+}
