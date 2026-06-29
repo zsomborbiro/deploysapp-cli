@@ -1,7 +1,7 @@
 // src/config.js
 import { homedir } from "os";
 import { join } from "path";
-import { mkdirSync, readFileSync, writeFileSync, rmSync, existsSync } from "fs";
+import { mkdirSync, readFileSync, writeFileSync, chmodSync, rmSync, existsSync } from "fs";
 import { DeploysAppClient } from "./client.js";
 
 function configHome() {
@@ -12,6 +12,7 @@ function configPath() { return join(configHome(), "config.json"); }
 export function saveConfig({ apiKey }) {
   mkdirSync(configHome(), { recursive: true });
   writeFileSync(configPath(), JSON.stringify({ apiKey }, null, 2), { mode: 0o600 });
+  chmodSync(configPath(), 0o600);
 }
 
 export function loadConfig() {
