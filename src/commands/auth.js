@@ -1,5 +1,4 @@
 // src/commands/auth.js
-import { hostname } from "os";
 import { execFile } from "child_process";
 import { makeClient, saveConfig, clearConfig, loadConfig } from "../config.js";
 
@@ -33,13 +32,20 @@ export function pollForToken(fetchFn, { intervalMs = 5000, maxMs = 600000 } = {}
 }
 
 function openBrowser(url) {
-  const cmd = process.platform === "darwin" ? "open" : process.platform === "win32" ? "start" : "xdg-open";
-  execFile(cmd, [url], () => {});
+  if (process.platform === "darwin") return execFile("open", [url], () => {});
+  if (process.platform === "win32") return execFile("cmd", ["/c", "start", "", url], () => {});
+  return execFile("xdg-open", [url], () => {});
 }
 
 export async function login({ open = true } = {}) {
   const base = API_URL();
-  const start = await fetch(`${base}/cli/device/code`, { method: "POST" }).then((r) => r.json());
+  const startRes = await fetch(`${base}/cli/device/code`, { method: "POST" });
+  if (!startRes.ok) {
+    const err = new Error(`Could not start login (server returned ${startRes.status}). Try again later.`);
+    err.exitCode = 3;
+    throw err;
+  }
+  const start = await startRes.json();
   console.log(`\n  To authorize this device, visit:\n    ${start.verification_uri}\n  and enter the code:\n\n    ${start.user_code}\n`);
   if (open) openBrowser(start.verification_uri);
 
