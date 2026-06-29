@@ -4,6 +4,7 @@ import { whoami, login, logout } from "../src/commands/auth.js";
 import { link } from "../src/commands/link.js";
 import { deploy } from "../src/commands/deploy.js";
 import { logs } from "../src/commands/logs.js";
+import { ps, restart, stop, start, scale, open } from "../src/commands/service.js";
 import { printErr } from "../src/output.js";
 
 const program = new Command();
@@ -35,5 +36,16 @@ program.command("logs").description("Show build or runtime logs")
   .option("--runtime", "show runtime logs (default)")
   .option("--tail <n>", "lines of runtime history", "200")
   .action(wrap((opts) => logs({ service: opts.service, follow: opts.follow, build: opts.build, runtime: opts.runtime, tail: opts.tail })));
+
+program.command("ps").description("List services and their status").action(wrap(() => ps()));
+
+const svcOpt = (c) => c.option("--service <id>", "service id");
+svcOpt(program.command("restart").description("Restart a service")).action(wrap((o) => restart(o)));
+svcOpt(program.command("stop").description("Stop a service")).action(wrap((o) => stop(o)));
+svcOpt(program.command("start").description("Start a service")).action(wrap((o) => start(o)));
+svcOpt(program.command("open").description("Open the service URL")).action(wrap((o) => open(o)));
+svcOpt(program.command("scale").description("Set the replica count"))
+  .requiredOption("--replicas <n>", "number of replicas")
+  .action(wrap((o) => scale(o)));
 
 program.parseAsync(process.argv);
