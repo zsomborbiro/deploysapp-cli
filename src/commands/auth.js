@@ -16,7 +16,18 @@ export function pollForToken(fetchFn, { intervalMs = 5000, maxMs = 600000 } = {}
   return new Promise((resolve, reject) => {
     const tick = async () => {
       let r;
-      try { r = await fetchFn(); } catch (e) { return reject(e); }
+      try {
+        r = await fetchFn();
+      } catch (e) {
+        // Transient network error mid-poll — retry until the deadline instead of
+        // failing the whole login on a single blip.
+        if (Date.now() > deadline) {
+          const err = new Error("Login timed out.");
+          err.exitCode = 3;
+          return reject(err);
+        }
+        return setTimeout(tick, intervalMs);
+      }
       if (r.status === 200 && r.body?.api_key) return resolve(r.body.api_key);
       const err = r.body?.error;
       if (err === "authorization_pending") {
