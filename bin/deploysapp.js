@@ -6,6 +6,7 @@ import { deploy } from "../src/commands/deploy.js";
 import { logs } from "../src/commands/logs.js";
 import { ps, restart, stop, start, scale, open } from "../src/commands/service.js";
 import { envList, envGet, envSet, envRm } from "../src/commands/env.js";
+import { secretList, secretAttach } from "../src/commands/secret.js";
 import { printErr } from "../src/output.js";
 
 const program = new Command();
@@ -56,5 +57,17 @@ env.command("set <pair>").option("--service <id>").option("--restart", "restart 
   .action(wrap((pair, o) => envSet({ ...o, pair })));
 env.command("rm <key>").option("--service <id>").option("--restart", "restart after removing")
   .action(wrap((key, o) => envRm({ ...o, key })));
+
+const secret = program.command("secret").description("Manage project secrets");
+secret.command("list")
+  .description("List secrets for a project")
+  .option("--project <id>", "project id")
+  .action(wrap((o) => secretList(o)));
+secret.command("attach <name>")
+  .description("Expose a project secret to a service as an env var")
+  .requiredOption("--as <ENV_KEY>", "environment variable name")
+  .option("--project <id>", "project id")
+  .option("--service <id>", "service id")
+  .action(wrap((name, o) => secretAttach({ ...o, name })));
 
 program.parseAsync(process.argv);
