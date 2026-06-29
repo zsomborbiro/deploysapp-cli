@@ -5,6 +5,7 @@ import { link } from "../src/commands/link.js";
 import { deploy } from "../src/commands/deploy.js";
 import { logs } from "../src/commands/logs.js";
 import { ps, restart, stop, start, scale, open } from "../src/commands/service.js";
+import { envList, envGet, envSet, envRm } from "../src/commands/env.js";
 import { printErr } from "../src/output.js";
 
 const program = new Command();
@@ -47,5 +48,13 @@ svcOpt(program.command("open").description("Open the service URL")).action(wrap(
 svcOpt(program.command("scale").description("Set the replica count"))
   .requiredOption("--replicas <n>", "number of replicas")
   .action(wrap((o) => scale(o)));
+
+const env = program.command("env").description("Manage environment variables");
+env.command("list").option("--service <id>").action(wrap((o) => envList(o)));
+env.command("get <key>").option("--service <id>").action(wrap((key, o) => envGet({ ...o, key })));
+env.command("set <pair>").option("--service <id>").option("--restart", "restart after setting")
+  .action(wrap((pair, o) => envSet({ ...o, pair })));
+env.command("rm <key>").option("--service <id>").option("--restart", "restart after removing")
+  .action(wrap((key, o) => envRm({ ...o, key })));
 
 program.parseAsync(process.argv);
