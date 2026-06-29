@@ -10,7 +10,7 @@ export function parseKeyValue(pair) {
 
 async function fetchEnv(client, id) {
   const data = await client.get(`/services/${encodeURIComponent(id)}/env`);
-  return data.env || data.envVars || data || [];
+  return data.env || data.envVars || (Array.isArray(data) ? data : []);
 }
 
 export async function envList({ service } = {}) {
