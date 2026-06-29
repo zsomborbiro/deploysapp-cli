@@ -3,6 +3,7 @@ import { Command } from "commander";
 import { whoami, login, logout } from "../src/commands/auth.js";
 import { link } from "../src/commands/link.js";
 import { deploy } from "../src/commands/deploy.js";
+import { logs } from "../src/commands/logs.js";
 import { printErr } from "../src/output.js";
 
 const program = new Command();
@@ -26,5 +27,13 @@ program.command("link").description("Bind the current directory to a service")
 program.command("deploy").description("Trigger a redeploy from git and stream the build log")
   .option("--service <id>", "service id")
   .action(wrap((opts) => deploy({ service: opts.service })));
+
+program.command("logs").description("Show build or runtime logs")
+  .option("--service <id>", "service id")
+  .option("-f, --follow", "follow runtime logs")
+  .option("--build", "show the latest build log instead of runtime")
+  .option("--runtime", "show runtime logs (default)")
+  .option("--tail <n>", "lines of runtime history", "200")
+  .action(wrap((opts) => logs({ service: opts.service, follow: opts.follow, build: opts.build, runtime: opts.runtime, tail: opts.tail })));
 
 program.parseAsync(process.argv);
