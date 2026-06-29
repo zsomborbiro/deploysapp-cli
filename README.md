@@ -1,9 +1,9 @@
-# @deploysapp/cli
+# deploysapp-cli
 
 Command-line interface for [DeploysApp](https://deploysapp.com) — deploy, manage, and monitor your services from the terminal.
 
 ```
-npm install -g @deploysapp/cli
+npm install -g deploysapp-cli
 ```
 
 Requires **Node >= 20**.

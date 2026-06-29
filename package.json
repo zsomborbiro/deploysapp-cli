@@ -1,5 +1,5 @@
 {
-  "name": "@deploysapp/cli",
+  "name": "deploysapp-cli",
   "version": "0.1.0",
   "engines": {
     "node": ">=20"
