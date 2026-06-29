@@ -16,4 +16,20 @@ describe("streamBuild", () => {
     expect(printed).toEqual(["step 1", "step 2", "done"]);
     expect(status).toBe("success");
   });
+
+  it("returns 'timeout' and does not hang when the server never signals done", async () => {
+    const client = { get: vi.fn(async () => ({ build: { status: "building" }, lines: [], nextCursor: 0, done: false })) };
+    const printed = [];
+    let nowCalls = 0;
+    // First call returns 0 (sets deadline = 0 + 1000 = 1000); subsequent calls return a value past the deadline
+    const now = () => (nowCalls++ === 0 ? 0 : 2000);
+    const status = await streamBuild(client, "b2", {
+      sleep: async () => {},
+      onLine: (l) => printed.push(l),
+      maxMs: 1000,
+      now,
+    });
+    expect(status).toBe("timeout");
+    expect(printed).toContain("[deploy] Stopped tailing after timeout; the build may still be running. Check the dashboard.");
+  });
 });
