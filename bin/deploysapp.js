@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import { whoami, login, logout } from "../src/commands/auth.js";
+import { link } from "../src/commands/link.js";
 import { printErr } from "../src/output.js";
 
 const program = new Command();
@@ -16,5 +17,9 @@ program.command("login").description("Authenticate this device")
   .option("--no-open", "don't auto-open the browser")
   .action(wrap((opts) => login({ open: opts.open })));
 program.command("logout").description("Remove stored credentials").action(wrap(logout));
+
+program.command("link").description("Bind the current directory to a service")
+  .option("--service <id>", "service id (skip the prompt)")
+  .action(wrap((opts) => link({ service: opts.service })));
 
 program.parseAsync(process.argv);
