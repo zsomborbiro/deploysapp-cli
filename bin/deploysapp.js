@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { whoami, login, logout } from "../src/commands/auth.js";
 import { link } from "../src/commands/link.js";
+import { deploy } from "../src/commands/deploy.js";
 import { printErr } from "../src/output.js";
 
 const program = new Command();
@@ -21,5 +22,9 @@ program.command("logout").description("Remove stored credentials").action(wrap(l
 program.command("link").description("Bind the current directory to a service")
   .option("--service <id>", "service id (skip the prompt)")
   .action(wrap((opts) => link({ service: opts.service })));
+
+program.command("deploy").description("Trigger a redeploy from git and stream the build log")
+  .option("--service <id>", "service id")
+  .action(wrap((opts) => deploy({ service: opts.service })));
 
 program.parseAsync(process.argv);
