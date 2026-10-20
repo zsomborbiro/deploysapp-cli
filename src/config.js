@@ -22,7 +22,7 @@ export function loadConfig() {
   })();
   return {
     apiKey: process.env.DEPLOYSAPP_API_KEY || fileKey,
-    apiUrl: process.env.DEPLOYSAPP_API_URL || "https://api.deploysapp.com",
+    apiUrl: process.env.DEPLOYSAPP_API_URL || "https://api.nexthub.hu",
   };
 }
 

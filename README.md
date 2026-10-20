@@ -1,6 +1,6 @@
 # deploysapp-cli
 
-Command-line interface for [DeploysApp](https://deploysapp.com) — deploy, manage, and monitor your services from the terminal.
+Command-line interface for [NextHub](https://nexthub.hu) (formerly DeploysApp) — deploy, manage, and monitor your services from the terminal.
 
 ```
 npm install -g deploysapp-cli
@@ -151,7 +151,7 @@ Project-scoped secrets can be attached to a service as an env var.
 | Source | Key | Default |
 |--------|-----|---------|
 | Env var | `DEPLOYSAPP_API_KEY` | — |
-| Env var | `DEPLOYSAPP_API_URL` | `https://api.deploysapp.com` |
+| Env var | `DEPLOYSAPP_API_URL` | `https://api.nexthub.hu` |
 | File | `~/.deploysapp/config.json` | written by `login` |
 
 Environment variables always take precedence over the config file.

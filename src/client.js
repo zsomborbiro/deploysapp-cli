@@ -1,4 +1,4 @@
-const DEFAULT_BASE_URL = "https://api.deploysapp.com";
+const DEFAULT_BASE_URL = "https://api.nexthub.hu";
 
 const ERROR_CODES = {
   UNAUTHORIZED: { retryable: false },
@@ -56,7 +56,7 @@ export class DeploysAppClient {
     if (!this.apiKey) {
       throw new DeploysAppError({
         code: "INVALID_CONFIG",
-        message: "Missing DEPLOYSAPP_API_KEY environment variable. Generate one at https://dashboard.deploysapp.com/dashboard/account → API Keys.",
+        message: "Missing DEPLOYSAPP_API_KEY environment variable. Generate one at https://dashboard.nexthub.hu/dashboard/account → API Keys.",
       });
     }
     if (!/^dsa_/.test(this.apiKey)) {
